@@ -1,33 +1,29 @@
-import { useState } from 'react';
-import { nanoid } from 'nanoid';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
 import { Header, SectionHeader } from './App.styled';
 import Filter from './Filter';
-import useLocalStorage from '../hooks/useLocalStorage';
-
-const LS_KEY = 'contacts';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, deleteContact } from 'redux/contactsSlice';
+import { getContacts, getFilter } from 'redux/selectors';
+import { updateFilter } from 'redux/filterSlice';
 
 export const App = () => {
-  const [contacts, setContacts] = useLocalStorage(LS_KEY, []);
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
 
   const onSubmit = values => {
-    if (contacts.find(contact => contact.name === values.name)) {
-      return;
-    }
-    values.id = nanoid();
-
-    setContacts([values, ...contacts]);
+    dispatch(addContact(values));
   };
 
   const onChange = event => {
     const { value } = event.target;
-    setFilter(value);
+    console.log(value);
+    dispatch(updateFilter(value));
   };
 
   const onDelete = id => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+    dispatch(deleteContact(id));
   };
 
   const normalizedFilter = filter.toLowerCase();
@@ -41,7 +37,7 @@ export const App = () => {
       <ContactForm onSubmit={onSubmit} />
 
       <SectionHeader>Contacts</SectionHeader>
-      <Filter onChange={onChange} filter={filter} />
+      <Filter onChange={onChange} />
       <ContactList contacts={visibleContacts} onDelete={onDelete} />
     </div>
   );

@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Label } from './Filter.styled';
+import { useSelector } from 'react-redux';
+import { getFilter } from 'redux/selectors';
 
-const Filter = ({ onChange, filter }) => {
+const Filter = ({ onChange }) => {
+  const filter = useSelector(getFilter);
+
   return (
     <Label>
       Find contacts by name
@@ -13,7 +17,6 @@ const Filter = ({ onChange, filter }) => {
 
 Filter.propTypes = {
   onChange: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
 };
 
 export default Filter;
