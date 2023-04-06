@@ -1,19 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { Field, Form, Label, SubmitBtn } from './ContactForm.styled';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
 
 const initialValues = {
   name: '',
   number: '',
 };
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
+  const dispatch = useDispatch();
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values, actions) => {
-        onSubmit(values);
+        dispatch(addContact(values));
         actions.resetForm();
       }}
     >
@@ -44,10 +47,6 @@ const ContactForm = ({ onSubmit }) => {
       </Form>
     </Formik>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

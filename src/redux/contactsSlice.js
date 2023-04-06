@@ -9,6 +9,10 @@ const contactsSlice = createSlice({
   reducers: {
     addContact: {
       reducer(state, action) {
+        if (state.find(contact => contact.name === action.payload.name)) {
+          return state;
+        }
+
         state.push(action.payload);
       },
       prepare(data) {
